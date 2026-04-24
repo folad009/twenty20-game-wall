@@ -4,14 +4,21 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import { Server } from "socket.io";
+import { isCorsOriginAllowed } from "../cors-origins";
 
 @WebSocketGateway({
   cors: {
-    origin:
-      process.env.WEB_ORIGINS?.split(",").map((s) => s.trim()) ?? [
-        "http://localhost:3000",
-      ],
+    origin: (
+      requestOrigin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      if (!isCorsOriginAllowed(requestOrigin)) {
+        return callback(null, false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
+    methods: ["GET", "POST", "OPTIONS"],
   },
   transports: ["websocket", "polling"],
 })

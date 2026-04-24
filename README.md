@@ -100,7 +100,8 @@ The web app reconnects with backoff and refetches lists on `connect`.
 | `JWT_SECRET` | Signing secret for access tokens |
 | `JWT_EXPIRES_SEC` | JWT expiry in seconds (default `604800` = 7 days) |
 | `PORT` | HTTP + Socket.IO port (default `4000`) |
-| `WEB_ORIGINS` | Comma-separated CORS origins |
+| `WEB_ORIGINS` | Comma-separated CORS origins (no trailing `/`). **Must** include your Vercel site, e.g. `https://your-app.vercel.app` |
+| `CORS_ALLOW_VERCEL` | Set to `1` to allow any `https://*.vercel.app` (handy for previews; do not use if you need strict allowlists) |
 | `ADMIN_PHONE` | Normalized match (spaces stripped); this phone gets `role: admin` on login |
 | `ADMIN_NAME` | Seed only (optional) |
 
@@ -108,8 +109,8 @@ The web app reconnects with backoff and refetches lists on `connect`.
 
 | Variable | Purpose |
 | -------- | ------- |
-| `NEXT_PUBLIC_API_URL` | REST base URL |
-| `NEXT_PUBLIC_SOCKET_URL` | Socket.IO server URL (usually same as API) |
+| `NEXT_PUBLIC_API_URL` | REST base URL — **must** include `https://` (or `http://` locally). |
+| `NEXT_PUBLIC_SOCKET_URL` | Socket.IO server URL (usually same as API). |
 
 ## Deploy: Railway (API + Postgres) + Vercel (Next.js)
 
@@ -135,7 +136,8 @@ Deploy **in this order**: Railway first (you need the public API URL), then Verc
    | `DATABASE_URL` | **Reference** the Postgres variable: click **Add Variable Reference** → choose Postgres → `DATABASE_URL`. |
    | `JWT_SECRET` | Long random string (e.g. `openssl rand -base64 48`). |
    | `JWT_EXPIRES_SEC` | `604800` (or your preference). |
-   | `WEB_ORIGINS` | Your Vercel URL(s), comma-separated, **no trailing slashes**, e.g. `https://your-app.vercel.app,https://your-app-git-main-yourteam.vercel.app` for previews. |
+   | `WEB_ORIGINS` | Your Vercel URL(s), comma-separated, **no trailing slashes**, e.g. `https://your-app.vercel.app,https://your-app-git-main-yourteam.vercel.app` for previews. If this does not **exactly** match the `Origin` header, the browser will report missing `Access-Control-Allow-Origin`. |
+   | `CORS_ALLOW_VERCEL` | (Optional) `1` = allow any `https://*.vercel.app` for frequent preview URLs without listing each. |
    | `ADMIN_PHONE` | E.164-style phone matching how users type it (spaces stripped on server), e.g. `+15550000001`. |
    | `ADMIN_NAME` | Optional display name for seed/docs. |
 
@@ -177,7 +179,7 @@ Only if you want demo rows; `ADMIN_PHONE` is still enforced at login.
 
    | Name | Value |
    |------|--------|
-   | `NEXT_PUBLIC_API_URL` | `https://your-api.up.railway.app` (your Railway public URL, **no** trailing slash). |
+   | `NEXT_PUBLIC_API_URL` | **`https://`** + your Railway host (e.g. `https://your-api.up.railway.app`). **No trailing slash.** If you omit `https://`, requests go to Vercel and return 404. |
    | `NEXT_PUBLIC_SOCKET_URL` | Same as `NEXT_PUBLIC_API_URL` unless you split WebSocket to another host. |
 
 4. **Deploy**. After it finishes, add your real Vercel URL(s) to Railway **`WEB_ORIGINS`** (comma-separated), then **Redeploy** the Railway API so CORS includes your frontend.
