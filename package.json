@@ -1,0 +1,22 @@
+{
+  "name": "game-wall",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,server -c cyan,magenta \"npm run dev -w apps/web\" \"npm run dev -w apps/server\"",
+    "build": "npm run build -w apps/server && npm run build -w apps/web",
+    "start": "concurrently -n web,server -c cyan,magenta \"npm run start -w apps/web\" \"npm run start -w apps/server\"",
+    "db:generate": "npm run prisma:generate -w apps/server",
+    "db:migrate": "npm run prisma:migrate -w apps/server",
+    "db:seed": "npm run prisma:seed -w apps/server",
+    "db:push": "npm run prisma:push -w apps/server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
