@@ -10,6 +10,11 @@ import { ApiError, createQuestion, login } from "@/lib/api";
 import { loginFormSchema, questionSchema } from "@/lib/validation";
 import { useAuthStore } from "@/store/auth-store";
 
+const guidedPrompts = [
+  "What’s the one problem in your business that’s quietly costing you?",
+  "What’s the overlooked gap in your business that’s holding back growth right now?",
+] as const;
+
 export default function HomePage() {
   const { token, user, setSession, clear } = useAuthStore();
   const [loginErrors, setLoginErrors] = useState<Record<string, string>>({});
@@ -160,11 +165,24 @@ export default function HomePage() {
       </header>
 
       <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg">
-        <h2 className="text-lg font-medium text-white">Ask a question</h2>
-        <p className="mt-1 text-sm text-slate-400">
-          Your question is sent to the team and may appear on the public wall
-          once answered.
-        </p>
+        <h2 className="text-lg font-medium text-white">
+          Share your biggest growth blocker
+        </h2>
+        <div className="mt-4 grid gap-3">
+          {guidedPrompts.map((prompt, index) => (
+            <button
+              key={prompt}
+              type="button"
+              onClick={() => setQuestion(prompt)}
+              className="rounded-xl border border-slate-700 bg-slate-950/60 p-3 text-left text-sm text-slate-200 transition hover:border-indigo-400 hover:bg-slate-900"
+            >
+              <span className="text-xs font-semibold uppercase tracking-wide text-indigo-300">
+                Prompt {index + 1}
+              </span>
+              <p className="mt-1">{prompt}</p>
+            </button>
+          ))}
+        </div>
         <form
           className="mt-6 space-y-4"
           onSubmit={(e) => {
@@ -177,7 +195,7 @@ export default function HomePage() {
             rows={4}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="What would you like to know?"
+            placeholder="Type your response or select a prompt above..."
             disabled={submittingQuestion}
           />
           {questionError && (
