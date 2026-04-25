@@ -66,6 +66,7 @@ API (REST + Socket.IO): [http://localhost:4000](http://localhost:4000)
 | `npm run db:migrate`  | `prisma migrate dev` (server workspace)    |
 | `npm run db:push`     | `prisma db push` (quick schema sync)       |
 | `npm run db:seed`     | Seed demo data                             |
+| `npm run db:reset:keep-admin` | Delete all questions + non-admin users, keep admin access |
 
 ## HTTP API
 

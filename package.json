@@ -11,7 +11,8 @@
     "db:generate": "npm run prisma:generate -w apps/server",
     "db:migrate": "npm run prisma:migrate -w apps/server",
     "db:seed": "npm run prisma:seed -w apps/server",
-    "db:push": "npm run prisma:push -w apps/server"
+    "db:push": "npm run prisma:push -w apps/server",
+    "db:reset:keep-admin": "npm run prisma:reset:keep-admin -w apps/server"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

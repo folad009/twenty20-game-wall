@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:push": "prisma db push",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:seed": "tsx prisma/seed.ts",
+    "prisma:reset:keep-admin": "tsx prisma/reset-keep-admin.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
